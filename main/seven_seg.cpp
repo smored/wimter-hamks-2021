@@ -48,7 +48,7 @@ seven_seg operator+(seven_seg l, int r) {
 }
 
 seven_seg& seven_seg::operator+=(int inc) {
- for (size_t i = 0; i < inc; ++i) {
+ for (int i = 0; i < inc; ++i) {
    ++(*this);  
  }
  return *this;

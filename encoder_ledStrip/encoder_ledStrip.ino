@@ -1,6 +1,6 @@
 #define outputA 6
  #define outputB 7
- int counter = 0; 
+ int diff = 0; 
  int aState;
  int aLastState;  
 
@@ -25,25 +25,27 @@ void loop() {
    if (aState != aLastState){     
      // If the outputB state is different to the outputA state, that means the encoder is rotating clockwise
      if (digitalRead(outputB) != aState) { 
-       counter ++;
+       diff ++;
      } else {
-       counter --;
+       diff --;
      }
-     if (counter >= 8) {
-      counter = 8;
-     } else if (counter <= 0) {
-      counter = 0;
+     if (diff >= 8) {
+      diff = 8;
+     } else if (diff <= 0) {
+      diff = 0;
      }
      Serial.print("Position: ");
-     Serial.println(counter);
+     Serial.println(diff);
    } 
    aLastState = aState; // Updates the previous state of the outputA with the current state
 
    for (int i = 44; i <= 52; i += 2) {
-    if (counter == (i - 44) || counter == (i - 45)) {
-      digitalWrite(i, HIGH);
-    } else {
-      digitalWrite(i, LOW);
+    if (diff == (i - 44) || diff == (i - 45)) {
+      for (int j = 44; j <= i; j += 2) {
+        digitalWrite(j, HIGH); 
+        digitalWrite(j+2, LOW);
+      }      
     }
    }
+   
 }

@@ -3,10 +3,10 @@
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
-
+#include <TM1637.h>
 
 Adafruit_MPU6050 mpu; // accelerometer
-
+TM1637 tm(21, 20); // 7 seg
 
 void setup(void) {
   Serial.begin(115200);
@@ -32,7 +32,8 @@ void setup(void) {
   }
   
  //7 seg init
-
+ tm.begin();
+ tm.setBrightness(4);
  
   mpu.setAccelerometerRange(MPU6050_RANGE_16_G);
   mpu.setGyroRange(MPU6050_RANGE_250_DEG);
@@ -62,6 +63,7 @@ void loop() {
 
 
   // 7 SEGMENT STUFF
-
-  delay(50);
+    tm.display(1234);
+    
+  //delay(50);
 }

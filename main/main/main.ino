@@ -3,10 +3,10 @@
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
-#include <TM1637.h>
+
 
 Adafruit_MPU6050 mpu; // accelerometer
-TM1637 tm(21, 20); // 7 seg
+
 
 void setup(void) {
   Serial.begin(115200);
@@ -15,10 +15,14 @@ void setup(void) {
   }
 
   //  Try to initialize!
+  pinMode(13, OUTPUT);
   if (!mpu.begin()) {
     Serial.println("Failed to find MPU6050 chip");
     while (1) {
-      delay(10);
+      digitalWrite(13, HIGH);
+      delay(100);
+      digitalWrite(13, LOW);
+      delay(100);
     }
   }
 
@@ -28,8 +32,7 @@ void setup(void) {
   }
   
  //7 seg init
- tm.begin();
- tm.setBrightness(4);
+
  
   mpu.setAccelerometerRange(MPU6050_RANGE_16_G);
   mpu.setGyroRange(MPU6050_RANGE_250_DEG);
@@ -45,19 +48,9 @@ void loop() {
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
 
-  /* Print out the values */
+  // ACCELEROMETER STUFF
   magnitude = sqrt(a.acceleration.x*a.acceleration.x + a.acceleration.y*a.acceleration.y + a.acceleration.z*a.acceleration.z);
   Serial.print(magnitude);
-//  Serial.print(",");
-//  Serial.print(a.acceleration.y);
-//  Serial.print(",");
-//  Serial.print(a.acceleration.z);
-//  Serial.print(", ");
-//  Serial.print(g.gyro.x);
-//  Serial.print(",");
-//  Serial.print(g.gyro.y);
-//  Serial.print(",");
-//  Serial.print(g.gyro.z);
   Serial.println("");
 
   static int i = 0; i += 2;
@@ -66,6 +59,9 @@ void loop() {
     digitalWrite((((j + i) % 12) + 43), j == 0 ? LOW : HIGH);
     // Serial.println("Pin " + String((((j + i) % 12) + 43)) + " is " + (j == 0 ? "on" : "off"));
   }
+
+
+  // 7 SEGMENT STUFF
 
   delay(50);
 }
